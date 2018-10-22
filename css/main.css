@@ -1,0 +1,54 @@
+* {
+  border: solid #6ac500 1px;
+}
+
+html {
+  padding: 15px 0;
+}
+
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Lucida Console, Lucida Sans Typewriter, monospace;
+  font-size: 12px;
+}
+
+hr {
+  border: solid grey 1px;
+}
+
+.status-bar {
+  list-style-type: none;
+}
+
+li {
+  display: inline;
+}
+
+.restart-btn {
+  float: right;
+}
+
+.board {
+
+}
+
+.card-row {
+  display: flex;
+}
+
+.card {
+  width: 25%;
+  min-height: 80px;
+  color: white;
+  background-color: midnightblue;
+  transition-timing-function: ease-in;
+}
+
+.card:hover {
+  transform: rotateY(180deg);
+}
+
+.align-right {
+  text-align: right;
+}
