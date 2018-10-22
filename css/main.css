@@ -45,10 +45,6 @@ li {
   transition-timing-function: ease-in;
 }
 
-.card:hover {
-  transform: rotateY(180deg);
-}
-
 .align-right {
   text-align: right;
 }
