@@ -1,21 +1,11 @@
-const cards = [
-    [1, 1, 2, 2],
-    [3, 3, 4, 4],
-    [5, 5, 6, 6],
-    [7, 7, 8, 8]
+const board = [
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1]
 ];
 
-/*
-  0: closed
-  1: open
-  2: match
-*/
-const flags = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
+const cards = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
 
 const MATCH_CARD = 8;
 
@@ -29,6 +19,7 @@ let finished = false;
 let timerId = -1;
 
 function initialize() {
+  shuffle();
   clearInterval(timerId);
   const board = document.getElementsByClassName('board');
   board[0].addEventListener('click', onClick);
@@ -49,17 +40,25 @@ function reset() {
 }
 
 function shuffle() {
-
+  for(let card of cards) {
+    while(true) {
+      let n = Math.floor((Math.random() * 16));
+      [row, col] = [parseInt(n / 4), n % 4];
+      if(board[row][col] == -1) {
+        board[row][col] = card;
+        break;
+      }
+    }
+  }
+  console.log(board);
 }
 
 function onTimer() {
-  timer++;
-  document.getElementsByClassName('timer')[0].textContent = `${timer} seconds`;
+  document.getElementsByClassName('timer')[0].textContent = `${++timer} seconds`;
 }
 
 function updateMoves() {
-  moves++;
-  document.getElementsByClassName('moves')[0].textContent = `${moves} moves`;
+  document.getElementsByClassName('moves')[0].textContent = `${++moves} moves`;
 }
 
 function isCardOpened() {
