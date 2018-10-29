@@ -25,22 +25,30 @@ let currentCard;
 let matchCount = 0;
 let timer = 0;
 let moves = 0;
-
-let timerId;
+let finished = false;
+let timerId = -1;
 
 function initialize() {
-
+  clearInterval(timerId);
+  const board = document.getElementsByClassName('board');
+  board[0].addEventListener('click', onClick);
 }
 
 function reset() {
+  openCount = 0;
+  openCardId;
+  currentCard;
+  matchCount = 0;
+  timer = 0;
+  moves = 0;
+  finished = false;
+  timerId = -1;
 
+  clearInterval(timerId);
+  shuffle();
 }
 
 function shuffle() {
-
-}
-
-function onFlip(event) {
 
 }
 
@@ -58,16 +66,39 @@ function isCardOpened() {
     return false;
 }
 
-function matchCard() {
-    return false;
+function openCard(e) {
+  e.target.classList.add('open');
+  openCount++;
+  openCardId = e.target.id;
+  currentCard = e.target.innerHTML;
+  e.target.style.backgroundColor = "#ffffff";
 }
 
-function isFinish() {
-    return false;
+function matchCard(e) {
+  let card = document.getElementById(openCardId);
+  if(e.target.innerHTML == currentCard) {
+    e.target.classList.add('match');
+    e.target.classList.add('open');
+    e.target.style.backgroundColor = "#ffffff";
+    card.classList.add('match');
+    matchCount++;
+    finish(matchCount);
+  } else {
+    card.classList.remove('open');
+    card.style.backgroundColor = "midnightblue";
+  }
+  openCount = 0;
+  openCardId = "";
+}
+
+function isFinished() {
+    return finished;
 }
 
 function showPopup() {
-    alert("You win!");
+  if(confirm("Congraturations")) {
+    initialize();
+  }
 }
 
 function rating() {
@@ -78,38 +109,25 @@ function finish(count) {
   if(count == MATCH_CARD) {
     clearInterval(timerId);
     showPopup();
+    finished = true;
   }
 }
 
 function onClick(e) {
-  if(matchCount >= MATCH_CARD) {
+  if(isFinished()) {
     return;
   }
 
   if(e.target.classList.contains('card')) {
-    const classList = e.target.classList;
-    if(!classList.contains('open')) {
+    if(timerId == -1) {
+     timerId = setInterval(onTimer, 1000);
+    }
+
+    if(!e.target.classList.contains('open')) {
       if(openCount > 0) {
-        let card = document.getElementById(openCardId);
-        if(e.target.innerHTML == currentCard) {
-          e.target.classList.add('match');
-          e.target.classList.add('open');
-          card.classList.add('match');
-          matchCount++;
-          finish(matchCount);
-          e.target.style.backgroundColor = "#ffffff";
-        } else {
-          card.classList.remove('open');
-          card.style.backgroundColor = "midnightblue";
-        }
-        openCount = 0;
-        openCardId = "";
+        matchCard(e);
       } else {
-        classList.add('open');
-        openCount++;
-        openCardId = e.target.id;
-        currentCard = e.target.innerHTML;
-        e.target.style.backgroundColor = "#ffffff";
+        openCard(e);
       }
     } else {
 
@@ -118,6 +136,4 @@ function onClick(e) {
   }
 }
 
-timerId = setInterval(onTimer, 1000);
-const board = document.getElementsByClassName('board');
-board[0].addEventListener('click', onClick);
+initialize();
