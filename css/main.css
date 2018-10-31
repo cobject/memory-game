@@ -29,9 +29,7 @@ li {
   float: right;
 }
 
-.board {
-
-}
+.board {}
 
 .card-row {
   display: flex;

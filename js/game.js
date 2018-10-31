@@ -1,8 +1,8 @@
 const board = [
-    [-1, -1, -1, -1],
-    [-1, -1, -1, -1],
-    [-1, -1, -1, -1],
-    [-1, -1, -1, -1]
+  [-1, -1, -1, -1],
+  [-1, -1, -1, -1],
+  [-1, -1, -1, -1],
+  [-1, -1, -1, -1]
 ];
 
 const cards = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
@@ -19,10 +19,22 @@ let finished = false;
 let timerId = -1;
 
 function initialize() {
-  shuffle();
+  buildCards();
   clearInterval(timerId);
   const board = document.getElementsByClassName('board');
   board[0].addEventListener('click', onClick);
+}
+
+function buildCards() {
+  shuffle();
+  let count = 0;
+  for (let i = 0; i < 4; i++) {
+    const cardRow = document.querySelector(`#card-row-${i}`);
+    for (let card of cardRow.children) {
+      card.dataset.face = board[parseInt(count / 4)][count % 4];
+      count++;
+    }
+  }
 }
 
 function reset() {
@@ -36,21 +48,20 @@ function reset() {
   timerId = -1;
 
   clearInterval(timerId);
-  shuffle();
+  buildCards();
 }
 
 function shuffle() {
-  for(let card of cards) {
-    while(true) {
+  for (let card of cards) {
+    while (true) {
       let n = Math.floor((Math.random() * 16));
       [row, col] = [parseInt(n / 4), n % 4];
-      if(board[row][col] == -1) {
+      if (board[row][col] == -1) {
         board[row][col] = card;
         break;
       }
     }
   }
-  console.log(board);
 }
 
 function onTimer() {
@@ -62,20 +73,20 @@ function updateMoves() {
 }
 
 function isCardOpened() {
-    return false;
+  return false;
 }
 
 function openCard(e) {
   e.target.classList.add('open');
   openCount++;
   openCardId = e.target.id;
-  currentCard = e.target.innerHTML;
+  currentCard = e.target.dataset.face;
   e.target.style.backgroundColor = "#ffffff";
 }
 
 function matchCard(e) {
   let card = document.getElementById(openCardId);
-  if(e.target.innerHTML == currentCard) {
+  if (e.target.dataset.face == currentCard) {
     e.target.classList.add('match');
     e.target.classList.add('open');
     e.target.style.backgroundColor = "#ffffff";
@@ -91,11 +102,11 @@ function matchCard(e) {
 }
 
 function isFinished() {
-    return finished;
+  return finished;
 }
 
 function showPopup() {
-  if(confirm("Congraturations")) {
+  if (confirm("Congraturations")) {
     initialize();
   }
 }
@@ -105,7 +116,7 @@ function rating() {
 }
 
 function finish(count) {
-  if(count == MATCH_CARD) {
+  if (count == MATCH_CARD) {
     clearInterval(timerId);
     showPopup();
     finished = true;
@@ -113,17 +124,17 @@ function finish(count) {
 }
 
 function onClick(e) {
-  if(isFinished()) {
+  if (isFinished()) {
     return;
   }
 
-  if(e.target.classList.contains('card')) {
-    if(timerId == -1) {
-     timerId = setInterval(onTimer, 1000);
+  if (e.target.classList.contains('card')) {
+    if (timerId == -1) {
+      timerId = setInterval(onTimer, 1000);
     }
 
-    if(!e.target.classList.contains('open')) {
-      if(openCount > 0) {
+    if (!e.target.classList.contains('open')) {
+      if (openCount > 0) {
         matchCard(e);
       } else {
         openCard(e);
