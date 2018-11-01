@@ -17,21 +17,30 @@ let timer = 0;
 let moves = 0;
 let finished = false;
 let timerId = -1;
+let numOfWins = 0;
+let stars = 0;
+let currCard;
 
 function initialize() {
+  console.log('init');
   buildCards();
   clearInterval(timerId);
-  const board = document.getElementsByClassName('board');
-  board[0].addEventListener('click', onClick);
+  document.getElementsByClassName('board')[0].addEventListener('click', onClick);
+  document.getElementsByClassName('restart-btn')[0].addEventListener('click', onRestart);
 }
 
 function buildCards() {
+  console.log('build');
   shuffle();
   let count = 0;
   for (let i = 0; i < 4; i++) {
     const cardRow = document.querySelector(`#card-row-${i}`);
     for (let card of cardRow.children) {
       card.dataset.face = board[parseInt(count / 4)][count % 4];
+      card.classList.remove('open');
+      card.classList.remove('match');
+      card.textContent = "";
+      card.style.backgroundColor = "midnightblue";
       count++;
     }
   }
@@ -39,8 +48,8 @@ function buildCards() {
 
 function reset() {
   openCount = 0;
-  openCardId;
-  currentCard;
+  openCardId = 0;
+  currentCard = 0;;
   matchCount = 0;
   timer = 0;
   moves = 0;
@@ -52,6 +61,13 @@ function reset() {
 }
 
 function shuffle() {
+  console.log('shuffle');
+  for(let i = 0; i < 4; i++) {
+    for(let j = 0; j < 4; j++) {
+      board[i][j] = -1;
+    }
+  }
+
   for (let card of cards) {
     while (true) {
       let n = Math.floor((Math.random() * 16));
@@ -77,28 +93,45 @@ function isCardOpened() {
 }
 
 function openCard(e) {
+  console.log('openCard');
   e.target.classList.add('open');
   openCount++;
   openCardId = e.target.id;
   currentCard = e.target.dataset.face;
-  e.target.style.backgroundColor = "#ffffff";
+  e.target.textContent = currentCard;
+  e.target.style.backgroundColor = "#aa0000";
 }
 
 function matchCard(e) {
+  console.log('matchCard');
   let card = document.getElementById(openCardId);
   if (e.target.dataset.face == currentCard) {
     e.target.classList.add('match');
     e.target.classList.add('open');
-    e.target.style.backgroundColor = "#ffffff";
+    e.target.textContent = currentCard;
+    e.target.style.backgroundColor = "#aa0000";
     card.classList.add('match');
     matchCount++;
     finish(matchCount);
+    openCount = 0;
+    openCardId = "";
   } else {
-    card.classList.remove('open');
-    card.style.backgroundColor = "midnightblue";
+    // current card
+    currCard = e.target;
+    e.target.textContent = e.target.dataset.face;
+    e.target.style.backgroundColor = "#aa0000";
+    setTimeout(function() {
+      currCard.textContent = "";
+      currCard.style.backgroundColor = "midnightblue";
+      // previous card
+      let card = document.getElementById(openCardId)
+      card.classList.remove('open');
+      card.textContent = "";
+      card.style.backgroundColor = "midnightblue";
+      openCount = 0;
+      openCardId = "";
+    }, 500);
   }
-  openCount = 0;
-  openCardId = "";
 }
 
 function isFinished() {
@@ -106,8 +139,9 @@ function isFinished() {
 }
 
 function showPopup() {
-  if (confirm("Congraturations")) {
-    initialize();
+  const str = `Congraturations!, ${numOfWins} win(s). ${stars} rating`;
+  if (confirm(str)) {
+    reset();
   }
 }
 
@@ -118,12 +152,14 @@ function rating() {
 function finish(count) {
   if (count == MATCH_CARD) {
     clearInterval(timerId);
+    numOfWins++;
     showPopup();
     finished = true;
   }
 }
 
 function onClick(e) {
+  console.log('onclick');
   if (isFinished()) {
     return;
   }
@@ -144,6 +180,10 @@ function onClick(e) {
     }
     updateMoves();
   }
+}
+
+function onRestart() {
+  reset();
 }
 
 initialize();
