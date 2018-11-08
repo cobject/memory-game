@@ -22,7 +22,6 @@ let stars = 0;
 let currCard;
 
 function initialize() {
-  console.log('init');
   buildCards();
   clearInterval(timerId);
   document.getElementsByClassName('board')[0].addEventListener('click', onClick);
@@ -30,7 +29,6 @@ function initialize() {
 }
 
 function buildCards() {
-  console.log('build');
   shuffle();
   let count = 0;
   for (let i = 0; i < 4; i++) {
@@ -61,7 +59,6 @@ function reset() {
 }
 
 function shuffle() {
-  console.log('shuffle');
   for(let i = 0; i < 4; i++) {
     for(let j = 0; j < 4; j++) {
       board[i][j] = -1;
@@ -93,7 +90,6 @@ function isCardOpened() {
 }
 
 function openCard(e) {
-  console.log('openCard');
   e.target.classList.add('open');
   openCount++;
   openCardId = e.target.id;
@@ -103,7 +99,6 @@ function openCard(e) {
 }
 
 function matchCard(e) {
-  console.log('matchCard');
   let card = document.getElementById(openCardId);
   if (e.target.dataset.face == currentCard) {
     e.target.classList.add('match');
@@ -146,8 +141,43 @@ function showPopup() {
   }
 }
 
-function rating() {
+function addStar(parent, inverse) {
+  const img = document.createElement('img');
+  img.classList.add('star');
+  img.src = inverse == true ? "img/baseline-star_border-24px.svg" : "img/baseline-star-24px.svg";
+  parent.appendChild(img);
+}
 
+function clearRating() {
+  const stars = document.getElementsByClassName('star');
+  const size = stars.length;
+  for(let i = size-1; i >= 0; i--) {
+    stars[i].remove();
+  }
+}
+
+function rating() {
+  const rating = document.getElementsByClassName('rating')[0];
+  let stars = 0;
+  let inverse_stars = 0;
+
+  if(moves >= 30) {
+    stars = 3;
+  } else if(moves >= 15) {
+    stars = 2;
+  } else {
+    stars = 1;
+  }
+  inverse_stars = 3 - stars;
+
+  clearRating();
+
+  for(let i = 0; i < stars; i++) {
+    addStar(rating);
+  }
+  for(let i = 0; i < inverse_stars; i++) {
+    addStar(rating, true);
+  }
 }
 
 function finish(count) {
@@ -161,7 +191,6 @@ function finish(count) {
 }
 
 function onClick(e) {
-  console.log('onclick');
   if (isFinished()) {
     return;
   }
@@ -170,7 +199,6 @@ function onClick(e) {
     if (timerId == -1) {
       timerId = setInterval(onTimer, 1000);
     }
-
     if (!e.target.classList.contains('open')) {
       if (openCount > 0) {
         matchCard(e);
