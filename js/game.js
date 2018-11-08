@@ -40,7 +40,7 @@ function buildCards() {
       card.classList.remove('open');
       card.classList.remove('match');
       card.textContent = "";
-      card.style.backgroundColor = "midnightblue";
+      card.style.backgroundColor = "#23272b";
       count++;
     }
   }
@@ -99,7 +99,7 @@ function openCard(e) {
   openCardId = e.target.id;
   currentCard = e.target.dataset.face;
   e.target.textContent = currentCard;
-  e.target.style.backgroundColor = "#aa0000";
+  e.target.style.backgroundColor = "#dc3545";
 }
 
 function matchCard(e) {
@@ -109,7 +109,7 @@ function matchCard(e) {
     e.target.classList.add('match');
     e.target.classList.add('open');
     e.target.textContent = currentCard;
-    e.target.style.backgroundColor = "#aa0000";
+    e.target.style.backgroundColor = "#dc3545";
     card.classList.add('match');
     matchCount++;
     finish(matchCount);
@@ -119,19 +119,20 @@ function matchCard(e) {
     // current card
     currCard = e.target;
     e.target.textContent = e.target.dataset.face;
-    e.target.style.backgroundColor = "#aa0000";
+    e.target.style.backgroundColor = "#dc3545";
     setTimeout(function() {
       currCard.textContent = "";
-      currCard.style.backgroundColor = "midnightblue";
+      currCard.style.backgroundColor = "#23272b";
       // previous card
       let card = document.getElementById(openCardId)
       card.classList.remove('open');
       card.textContent = "";
-      card.style.backgroundColor = "midnightblue";
+      card.style.backgroundColor = "#23272b";
       openCount = 0;
       openCardId = "";
     }, 500);
   }
+  updateMoves();
 }
 
 function isFinished() {
@@ -153,6 +154,7 @@ function finish(count) {
   if (count == MATCH_CARD) {
     clearInterval(timerId);
     numOfWins++;
+    rating();
     showPopup();
     finished = true;
   }
@@ -178,7 +180,6 @@ function onClick(e) {
     } else {
 
     }
-    updateMoves();
   }
 }
 

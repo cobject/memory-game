@@ -1,5 +1,5 @@
 * {
-  border: solid #6ac500 1px;
+  /*border: solid #6ac500 1px;*/
 }
 
 html {
@@ -23,13 +23,17 @@ hr {
 
 li {
   display: inline;
+  font-size: 1.5em;
 }
 
 .restart-btn {
   float: right;
 }
 
-.board {}
+.board {
+  border: solid grey 2px;
+  padding: 2px;
+}
 
 .card-row {
   display: flex;
@@ -37,9 +41,15 @@ li {
 
 .card {
   width: 25%;
-  min-height: 80px;
+  min-height: 200px;
+  font-size: 8em;
+  margin: 2px;
+  text-align: center;
+  display:flex;
+  align-items: center;
+  justify-content:center;
   color: white;
-  background-color: midnightblue;
+  background-color: #23272b;
   transition-timing-function: ease-in;
 }
 
