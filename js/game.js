@@ -94,10 +94,6 @@ function updateMoves() {
   document.getElementsByClassName('moves')[0].textContent = `${moves} moves`;
 }
 
-function isCardOpened() {
-  return false;
-}
-
 function openCard(e) {
   e.target.classList.add('open');
   openCount++;
