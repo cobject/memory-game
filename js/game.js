@@ -23,6 +23,7 @@ let currCard;
 
 function initialize() {
   buildCards();
+  rating();
   clearInterval(timerId);
   document.getElementsByClassName('board')[0].addEventListener('click', onClick);
   document.getElementsByClassName('restart-btn')[0].addEventListener('click', onRestart);
@@ -52,10 +53,13 @@ function reset() {
   timer = 0;
   moves = 0;
   finished = false;
-  timerId = -1;
 
   clearInterval(timerId);
+  timerId = -1;
   buildCards();
+  rating();
+  updateTime();
+  updateMoves();
 }
 
 function shuffle() {
@@ -77,12 +81,17 @@ function shuffle() {
   }
 }
 
+function updateTime() {
+  document.getElementsByClassName('timer')[0].textContent = `${timer} seconds`;
+}
+
 function onTimer() {
-  document.getElementsByClassName('timer')[0].textContent = `${++timer} seconds`;
+  timer++;
+  updateTime();
 }
 
 function updateMoves() {
-  document.getElementsByClassName('moves')[0].textContent = `${++moves} moves`;
+  document.getElementsByClassName('moves')[0].textContent = `${moves} moves`;
 }
 
 function isCardOpened() {
@@ -107,7 +116,13 @@ function matchCard(e) {
     e.target.style.backgroundColor = "#dc3545";
     card.classList.add('match');
     matchCount++;
-    finish(matchCount);
+    if (matchCount == MATCH_CARD) {
+      finished = true;
+      setTimeout(()=> {
+        finish();
+      }, 100);
+    }
+
     openCount = 0;
     openCardId = "";
   } else {
@@ -127,6 +142,7 @@ function matchCard(e) {
       openCardId = "";
     }, 500);
   }
+  moves++;
   updateMoves();
 }
 
@@ -165,6 +181,8 @@ function rating() {
     stars = 3;
   } else if(moves >= 15) {
     stars = 2;
+  } else if(moves == 0){
+    stars = 0;
   } else {
     stars = 1;
   }
@@ -180,14 +198,11 @@ function rating() {
   }
 }
 
-function finish(count) {
-  if (count == MATCH_CARD) {
-    clearInterval(timerId);
-    numOfWins++;
-    rating();
-    showPopup();
-    finished = true;
-  }
+function finish() {
+  clearInterval(timerId);
+  numOfWins++;
+  rating();
+  showPopup();
 }
 
 function onClick(e) {
