@@ -16,13 +16,13 @@ This game is to match a pair card on board.
 
 1. Complete the project
 
-2. Use 
+2. Use DOM corrently
 
 # Checklist
 
 ## Game Behavior
 
-- [x] Randomly shuffles the cards. 
+- [x] Randomly shuffles the cards.
 - [x] A user wins once all cards have successfully been matched.
 - [x] Congratulations Popup
 - [x] Restart Button
@@ -51,9 +51,11 @@ This game is to match a pair card on board.
 
 # Validation
 
-- [] [HTML Validation](https://validator.w3.org/)
-- [] [CSS Validation](https://jigsaw.w3.org/css-validator/#validate_by_input)
+- [x] [HTML Validation](https://validator.w3.org/)
+- [x] [CSS Validation](https://jigsaw.w3.org/css-validator/#validate_by_input)
 
 # Lessons learned
 
-1. TBD
+1. Logic is important before coding.
+
+2. Practice is the best to learn!

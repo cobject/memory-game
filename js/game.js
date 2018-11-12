@@ -18,17 +18,23 @@ let moves = 0;
 let finished = false;
 let timerId = -1;
 let numOfWins = 0;
-let stars = 0;
+let rating = 0;
 let currCard;
 
+/**
+* @description Initialize a game
+*/
 function initialize() {
   buildCards();
-  rating();
+  setRating();
   clearInterval(timerId);
   document.getElementsByClassName('board')[0].addEventListener('click', onClick);
   document.getElementsByClassName('restart-btn')[0].addEventListener('click', onRestart);
 }
 
+/**
+* @description Build cards
+*/
 function buildCards() {
   shuffle();
   let count = 0;
@@ -45,6 +51,9 @@ function buildCards() {
   }
 }
 
+/**
+* @description Reset a game
+*/
 function reset() {
   openCount = 0;
   openCardId = 0;
@@ -57,14 +66,17 @@ function reset() {
   clearInterval(timerId);
   timerId = -1;
   buildCards();
-  rating();
+  setRating();
   updateTime();
   updateMoves();
 }
 
+/**
+* @description Shuffle cards
+*/
 function shuffle() {
-  for(let i = 0; i < 4; i++) {
-    for(let j = 0; j < 4; j++) {
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 4; j++) {
       board[i][j] = -1;
     }
   }
@@ -81,19 +93,32 @@ function shuffle() {
   }
 }
 
+/**
+* @description Update time
+*/
 function updateTime() {
   document.getElementsByClassName('timer')[0].textContent = `${timer} seconds`;
 }
 
+/**
+* @description Callback function for timer
+*/
 function onTimer() {
   timer++;
   updateTime();
 }
 
+/**
+* @description Update moves
+*/
 function updateMoves() {
   document.getElementsByClassName('moves')[0].textContent = `${moves} moves`;
 }
 
+/**
+* @description Open a card
+* @param {event} click event for card
+*/
 function openCard(e) {
   e.target.classList.add('open');
   openCount++;
@@ -103,6 +128,10 @@ function openCard(e) {
   e.target.style.backgroundColor = "#dc3545";
 }
 
+/**
+* @description Match a card
+* @param {e} click event for card
+*/
 function matchCard(e) {
   let card = document.getElementById(openCardId);
   if (e.target.dataset.face == currentCard) {
@@ -114,7 +143,7 @@ function matchCard(e) {
     matchCount++;
     if (matchCount == MATCH_CARD) {
       finished = true;
-      setTimeout(()=> {
+      setTimeout(() => {
         finish();
       }, 100);
     }
@@ -142,17 +171,28 @@ function matchCard(e) {
   updateMoves();
 }
 
+/**
+* @description Returns whether game is finished or not
+*/
 function isFinished() {
   return finished;
 }
 
+/**
+* @description Show popup
+*/
 function showPopup() {
-  const str = `Congraturations!, ${numOfWins} win(s). ${stars} rating`;
+  const str = `Congraturations!, ${numOfWins} win(s). ${rating} rating`;
   if (confirm(str)) {
     reset();
   }
 }
 
+/**
+* @description Add star in rating component
+* @param {parent} parent node
+* @param {inverse} whether inverse star or not
+*/
 function addStar(parent, inverse) {
   const img = document.createElement('img');
   img.classList.add('star');
@@ -160,47 +200,60 @@ function addStar(parent, inverse) {
   parent.appendChild(img);
 }
 
+/**
+* @description Clear rating
+*/
 function clearRating() {
   const stars = document.getElementsByClassName('star');
   const size = stars.length;
-  for(let i = size-1; i >= 0; i--) {
+  for (let i = size - 1; i >= 0; i--) {
     stars[i].remove();
   }
 }
 
-function rating() {
-  const rating = document.getElementsByClassName('rating')[0];
-  let stars = 0;
+/**
+* @description Set ratign
+*/
+function setRating() {
+  const element = document.getElementsByClassName('rating')[0];
+  rating = 0;
   let inverse_stars = 0;
 
-  if(moves >= 30) {
-    stars = 3;
-  } else if(moves >= 15) {
-    stars = 2;
-  } else if(moves == 0){
-    stars = 0;
+  if (moves >= 30) {
+    rating = 3;
+  } else if (moves >= 15) {
+    rating = 2;
+  } else if (moves == 0) {
+    rating = 0;
   } else {
-    stars = 1;
+    rating = 1;
   }
-  inverse_stars = 3 - stars;
+  inverse_stars = 3 - rating;
 
   clearRating();
 
-  for(let i = 0; i < stars; i++) {
-    addStar(rating);
+  for (let i = 0; i < rating; i++) {
+    addStar(element);
   }
-  for(let i = 0; i < inverse_stars; i++) {
-    addStar(rating, true);
+  for (let i = 0; i < inverse_stars; i++) {
+    addStar(element, true);
   }
 }
 
+/**
+* @description Finish game
+*/
 function finish() {
   clearInterval(timerId);
   numOfWins++;
-  rating();
+  setRating();
   showPopup();
 }
 
+/**
+* @description Click callback for card
+* @param {e} event for card
+*/
 function onClick(e) {
   if (isFinished()) {
     return;
@@ -222,6 +275,9 @@ function onClick(e) {
   }
 }
 
+/**
+* @description Click callback for button
+*/
 function onRestart() {
   reset();
 }

@@ -5,8 +5,17 @@ html {
 body {
   max-width: 1200px;
   margin: 0 auto;
-  font-family: Lucida Console, Lucida Sans Typewriter, monospace;
+  font-family: "Lucida Console", "Lucida Sans Typewriter", monospace;
   font-size: 12px;
+}
+
+header,
+nav,
+footer,
+section,
+article,
+div {
+  box-sizing: border-box;
 }
 
 hr {
@@ -14,16 +23,34 @@ hr {
 }
 
 .status-bar {
-  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  min-height: 30px;
+  font-size: 2em;
+  padding: 10px;
+  background-color: #d6d8db;
 }
 
-li {
-  display: inline;
-  font-size: 1.5em;
+.timer,
+.moves {
+  width: 25%;
+}
+
+.rating {
+  width: 30%;
 }
 
 .restart-btn {
-  float: right;
+  width: 20%;
+  font-size: 1em;
+  padding: 2px;
+  background-color: #cce5ff;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .board {
@@ -41,9 +68,9 @@ li {
   font-size: 8em;
   margin: 2px;
   text-align: center;
-  display:flex;
+  display: flex;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   color: white;
   background-color: #23272b;
   transition-timing-function: ease-in;
@@ -51,4 +78,14 @@ li {
 
 .align-right {
   text-align: right;
+}
+
+@media screen and (max-width: 700px) {
+  .timer,
+  .moves,
+  .rating,
+  .restart-btn {
+    width: 50%;
+    font-size: 0.5em;
+  }
 }
